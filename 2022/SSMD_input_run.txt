@@ -1,0 +1,233 @@
+#SSMD_jc20210527a00_antiSym_FdChkAll_round_CS_SS_HardP_BiMix_U0.1_dt1e-5_1e8_Rdm_Rf10.0.txt: compute and dump ContN //jc20210527 suggested by HJ// ; Amp_CS=2.0, Cyc=3.0
+#Modified from
+#SSMD_jc20210525a_antiSym_3dt_FdChkAllNeighbors_CS_SS_HardP_BiMix_Zf10.4_U0.1_dt1e-5_round.txt : attempts to make the End_of_Fd an integer //jc20210525//
+#SSMD_hj20210519_antiSym_3dt_FdChkAllNeighbors_CS_SS_HardP_BiMix_Zf10.4_U0.1_dt1e-5_totalstep99600.txt ->error
+#SSMD_jc20210519_antiSym_3dt_FdChkAllNeighbors_CS_SS_HardP_BiMix_Zf10.4_U0.1_dt1e-5.txt: Neighbor check ALL during Fd to avoid errors at End_of_Fd,  but REDUCED in CS and SS //by HJ20210519//
+#SSMD_jc20210205test23451_antiSym_3dt_Fd_CS_SS_HardP_BiMix_Zf10.4_U0.1_dt1e-5.txt : bug in End_of_Fd fixed (no longer a constant)  //jc20210204//
+#SSMD_jc20210101test4_antiSym_3dt_Fd_CS_SS_HardP_BiMix_Zf10.4_U0.1_dt1e-5.txt : changing Zf[(6.0  7.0  8.0  9.0  9.6) (10.0) 10.2 10.4 10.6 10.8 11.0 11.2 (11.4)]_PL1_Vc1e-2
+#identical to SSMD_jc20201218test4_antiSym_3dt_Fd_CS_SS_HardPlanes_BiMix_Zf10.0_U0.1_dt1e-5.txt: effect of Amp_CS still appears doubled, for unknown reason
+#identical to SSMD_jc20201214test4_antiSym_3dt_Fd_CS_SS_HardPlanes_BiMix_Zf10.0_U0.1_dt1e-5.txt: Make UW and LW antisymmetric except for Fd
+#SSMD_jc20201204d002Cyc4.0_3dt_Fd_CS_SS_HardPlanes_BiMix_amp2.0_Zf11.0_U0.1_dt1e-5.txt: HardPlane imposed by lj93 , wrap X only //jc1201d//
+#SSMD_jc20201201b002_test_3dt_Fd_CS_SS_BiMix_amp2.0_Cyc2.0_U0.1_dt1e-5.txt: UW back to velocity control in z, as its displacement control being problematic
+#Modified from SSMD_jc20201201a002_test_3dt_Fd_CS_SS_BiMix_amp2.0_Cyc2.0_U0.1_dt1e-5.txt: Abandon making walls "harder" (imcompatible with gran/hertz/history); replace velocity control v_Uz with displacement control v_zMove; z0:=Zf+100 z_SS=Zf-Amp_CS*sin(); .atomsXYZwrapXonly 
+#Modified from SSMD_jc20201123h008HardWall_3dt_Fd_CS_SS_BiMix_amp2.5_z10.0_Cyc04up_U0.1_dt1e-5.txt: Make UW and LW 100X harder; Flow particles back to 0.9 vs 1.1; CS speed back to 1.0
+#Modified from SSMD_jc20201122h008three_dt_Fd_0.1CS1e-5_SS_BiMix_amp2.5_z10.0_Cyc04up_U0.1_dt1e-5.txt: Change particle sizes into 1.0 and 1.2 to prevent leaking ; dump2 fixed //jc1122g//
+#Modified from SSMD_jc20201121g005three_dt_Fd_0.1CS1e-5_SS_BiMix[CS_leak]_amp3.0_z10.0_Cyc03dw_U0.1_dt1e-5.txt : |U2|*dt2 := 0.1*1e-5 ; dump2=1e5 //jc1121h//
+#Modified from SSMD_jc20201120e008three_dt_Fd_CS_SS_BiMix_amp3.0_z10.0_Cyc04up_U0.1_dt1e-5.txt : incorporating SSMD_jc20200910_005Random_Fd_CCSS_BiMix.txt 
+#Modified from SSMD_jc20201118d008three_dt_Fd_CS_SS_Amp3.0_z11.0_Cyc04up_U0.1_dt1e-5.txt  :no more repeated dumps
+#Modified from SSMD_jc20201117c003three_dt_Fd_CS_SS_Amp3.0_z10.0_Cyc02dw_U0.1_dt1e-5.txt : adjustable Amplitude and Cyc-up/dw
+#Modified from SSMD_jc20201117_003Multi_dt_Fd_CS_SS_Mono.txt :¡@FastDescent at U1=100 from z0=112 to 12, Cyclic_Compression+Shearing(CS) at |U2|=0.1 between 12 and 6, Steady_Shearing(SS) at U=0.1 for z=10 ; Xmu=0.5
+#Modified from SSMD_jc20201117_001test_2dt_Fd_CCSS_Mono.txt:  make two dumps and two runs, with different dt
+#Modified from SSMD_jc20200910_003Random_Fd_CCSS_Mono.txt :¡@Fast descent of UW before reaching Z=12; CyclicCompression+SimpleShearing
+#Modified from SSMD_jc20200902RandomBiMix_002.txt : Change exponential compression into linear with Uz=-1.0cm/s; abandom
+#Modified from SSMD_jc20200902RandomBiMix_001c.txt : "Compute and Dump", Kn, Kt, Gamma_N copied from SSMD_Yuki20200818_U0_1.0_Zinf8.8_initialState_Xm1_Bgoff_d0.00001_Meff1.0_Script.txt except tau=10e-3 
+#Modified from SSMD_jc20200525Random_Xmu1_d0.9_Zinf8.8_Uxxx_.txt
+
+clear
+
+
+variable U1 equal -100.0
+variable dt1 equal 1e-5
+#variable End_of_Fd equal 1e5     #in step, Fast descent before End_of_Fd.........//jc0909//
+variable dump1 equal 1000
+
+
+#compromised dx=dz=1e-5 ---------------------------------//jc1117/
+variable U2 equal 1.0               # back to //jc1120//
+variable dt2 equal 1e-5  
+variable dump2 equal 1e4            #-------------//jc1123//
+variable Amp_CS equal 2.0     # away from Zf
+variable Step_quarterCycle equal ${Amp_CS}*1e5 # back to //jc1120//
+variable Cyc equal 3.0      # integer or halves only
+
+variable U equal 0.1
+variable dt equal 1e-5
+variable dump_SS equal 1e4
+variable totalstep_SS equal 1e8     #........strain control //jc20210527//
+
+
+# Initialization ---------------------------------------------
+units           cgs
+dimension       3
+boundary        p p sm
+atom_style      sphere
+neigh_modify    every 1 delay 0 check no  #HJ 20210519
+comm_modify     vel yes                           
+newton          off                                     
+atom_modify     map array                          
+comm_style      tiled                                
+
+# CONFIGURATION ------------------------------------------------
+# We will create one simulation box (SimBox), three types of atoms (type 1 for "upper wall", type 2 for "the flow", type 3 for "lowerwall"), and three groups (UW, Flow, LW) 
+
+
+#---------------------------------------------------------------#SSMD_jc20200520Random
+
+#0) Creating simulation box SimBox 
+
+variable Zf equal 10.0     #----------------//jc20210204//
+variable z0 equal 110  #----------------//jc20210101//   
+variable zMax equal ${z0}+1.0
+variable zMaxRandom equal ${z0}-1.0
+
+region          SimBox block -6.0 6.0  -4.0 4.0 -3.0 ${zMax}
+create_box 4 SimBox #------------//jc1120//
+
+#1) "Variable evaluation before simulation box is defined" NOT ALLOWED, therefore:    ---------------------- ///jc1118//
+variable End_of_Fd equal round((${Zf}-${z0})/(${U1}*${dt1}))     #totalstep for the Fast descent, rounded..//jc20210525//
+variable totalstep_CS equal ${Cyc}*4*${Step_quarterCycle}
+variable End_of_CS equal ${End_of_Fd}+${totalstep_CS}   #for z=12-${z_below12}                                                          
+#variable Ux equal (step>${End_of_Fd})*(step<${End_of_CS})*${U2}+${U}*(step>${End_of_CS})           #Shearing in CS and SS  
+variable UxUW equal 0.5*(step>${End_of_Fd})*(step<${End_of_CS})*${U2}+0.5*${U}*(step>${End_of_CS})  #......//jc1214antiSym// 
+variable UxLW equal -0.5*(step>${End_of_Fd})*(step<${End_of_CS})*${U2}-0.5*${U}*(step>${End_of_CS}) #......//jc1214antiSym//
+variable Uy equal 0.0  #..........//jc0909//
+# zMove := (step<${End_of_Fd})*${U1}*time-(step>=${End_of_Fd})*100.0
+#         -(step>=${End_of_Fd})*(step<${End_of_CS})*${Amp_CS}*sin(0.5*PI*(step-${End_of_Fd})/${Step_quarterCycle})  #----//jc1201a// for one-sided zMove                                                   
+variable zMoveUW equal -(step>=${End_of_Fd})*(step<${End_of_CS})*0.5*${Amp_CS}*sin(0.5*PI*(step-${End_of_Fd})/${Step_quarterCycle})+(step<${End_of_Fd})*${U1}*time-(step>=${End_of_Fd})*100.0  #......//jc1214antiSym//
+variable zMoveLW equal (step>=${End_of_Fd})*(step<${End_of_CS})*0.5*${Amp_CS}*sin(0.5*PI*(step-${End_of_Fd})/${Step_quarterCycle})                                                           #......//jc1214antiSym//   
+#variable AmpUz equal -${Amp_CS}*0.5*PI/${Step_quarterCycle}*1.0/${dt2}  #*cosine -----//jc1201a//
+variable AmpUz equal -0.5*${Amp_CS}*0.5*PI/${Step_quarterCycle}*1.0/${dt2}#......//jc1214antiSym// 
+variable UzUW equal (step>=${End_of_Fd})*(step<${End_of_CS})*${Amp_CS}*(-0.5)*PI/${Step_quarterCycle}*1.0/${dt2}*cos(0.5*PI*(step-${End_of_Fd})/${Step_quarterCycle})+(step<${End_of_Fd})*${U1}
+variable UzLW equal -(step>=${End_of_Fd})*(step<${End_of_CS})*${Amp_CS}*(-0.5)*PI/${Step_quarterCycle}*1.0/${dt2}*cos(0.5*PI*(step-${End_of_Fd})/${Step_quarterCycle})   #......//jc1214antiSym//
+#    ----------------------------------------------------------------------------------------- ///jc1117/
+
+
+
+#2a) atoms for the Flow     --------------------//jc1120//
+#variable Ni equal  3000     #2400->1170  4800-->1200 with cutoff=1.0 in [-6 12];  3000-->2046 in [-2 38] d=0.6...; 3000-->1200 in [-2 38] d=0.99
+variable Ni2 equal 1500      #//jc0902//  
+variable Ni4 equal 1500      #//jc0902//
+region ExpandedBox block -6.0 6.0  -4.0 4.0 1.0 ${zMaxRandom}
+create_atoms 2 random ${Ni2} 12345 ExpandedBox  #//jc20210527//
+create_atoms 4 random ${Ni4} 12345 ExpandedBox  #//jc20210527// 
+group Flow type 2 4                             #//jc0902//
+
+set type 2 diameter 0.9     #back to original BiMix
+set type 2 mass 1  
+set type 4 diameter 1.1     #back to original BiMix
+set type 4 mass 1
+velocity Flow set 0.0 0.0 0.0
+group Small type 2
+group Large type 4
+
+#2b) atoms for UW
+#region       UW   block -6.0 6.0  -4.0 4.0 3.0 3.5 
+region       UW   block -6.0 6.0  -4.0 4.0 ${z0} ${zMax}     #higherUW
+lattice sc 1
+create_atoms 3 region UW     
+group UW type 3
+set type 3 diameter 1.0
+set type 3 mass 1.000
+velocity UW set 0.0 0.0 0.0   #//jc0902//   
+
+#2c) atoms for LW
+region       LW   block -6.0 6.0 -4.0 4.0 -2.0 0.0 
+lattice sc 1
+create_atoms 1 region LW      
+group LW type 1
+set type 1 diameter 1.0
+set type 1 mass 1.000
+velocity LW set 0.0 0.0 0.0 
+
+
+#3)  FORCE FILEDS-------
+variable Kn         equal 1.5e7              #=1.5MPa=(8/9)*1.6875MPa, not 1.5e9 //jc0902//
+variable Kt         equal 1.5e7              #=1.5MPa=(8/9)*1.6875MPa, not 1.5e9 //jc0902//                  
+variable tau            equal 10e-3          #//jc0902//
+variable Meff           equal 1.0            #//jc0902//
+variable gammaN         equal ${Kn}*${tau}/${Meff}    #K*tau / Meff , tau~10ms, Meff~1g  //jc0902//
+variable gammaT     equal 3e1  # dummy variable when dampF=0  //jc0902//
+variable Xmu        equal 1.0 
+#variable Xmu        equal 0.0
+variable dampF      equal 0 # zero to turn off tangential damping 
+
+pair_style    gran/hertz/history ${Kn} ${Kt} ${gammaN} ${gammaT} ${Xmu} ${dampF} #
+pair_coeff    * *
+
+
+
+
+#4) delete possible overlaps -- must be after pair_style defined
+delete_atoms overlap 1.1 Flow LW         #//jc1123//
+delete_atoms overlap 1.1 Flow UW         #//jc1123//
+delete_atoms overlap 1.1 Flow Flow       #----------//jc1122//
+
+
+# OPERATIONS within TIMESTEPPINGS (fixes) and diagnostics (computes) ------------#//jc0909//
+#Estimate: Phi = N_final * pi* 4(d/2)^3 /3 / (Wx*Wy*Zinf) , if Zinf>>1  ; e.g.~ 25pi/12/Phi ~13, if N_final=1200 , Phi~0.5
+
+
+#FIX and COMPUTE --------------------------------
+
+fix 001 Flow nve/sphere
+#fix 002 LW setforce 0.0 0.0 0.0
+fix 002 LW move variable NULL NULL NULL  v_UxLW v_Uy v_UzLW         #......//jc1214antiSym//
+fix 003 UW move variable NULL NULL NULL  v_UxUW v_Uy v_UzUW         #......//jc1214antiSym//
+########################### impenetrable wall[as shown by HJ20201125_ATRY.txt] ###...//jc1201c//
+variable repulsion_strength equal 100
+variable repulsion_distance equal 0.1
+region UpperHardBox block -1000 1000 -10 10 ${z0} ${zMax}  side out move NULL NULL v_zMoveUW #......//jc1214antiSym//
+region LowerHardBox block -1000 1000 -10 10 -5 0.0 side out move NULL NULL v_zMoveLW         #......//jc1214antiSym//
+fix 004UpperHardPlane Flow wall/region UpperHardBox lj93 ${repulsion_strength} ${repulsion_distance} ${repulsion_distance} ##strength in energy, position of minimum, cutoff length
+fix 004LowerHardPlane Flow wall/region LowerHardBox lj93 ${repulsion_strength} ${repulsion_distance} ${repulsion_distance}
+########################### impenetrable wall ###########################
+
+compute Pairs all property/local  ptype1 patom1  ptype2 patom2
+compute Force all pair/local dist fx fy fz p1 p2 p3 p4 p5 p6 p7 p8 p9 p10
+compute Cont2 Small contact/atom # //jc20210527 suggested by HJ//
+compute Cont4 Large contact/atom # //jc20210527 suggested by HJ//
+compute ContAll all contact/atom # //jc20210527 suggested by HJ//
+
+
+# DUMP1: Fd---------------------------------------- //jc1117//
+variable dumpstep equal ${dump1}
+dump 001a all custom ${dumpstep} *_Fd.atomsXYZ id type radius xu yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+#dump 001b all custom ${dumpstep} *_Fd.atomsXYZwrapXonly id type radius x yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+dump 003 all local  ${dumpstep} *_Fd.PairForce  index  c_Pairs[1] c_Pairs[2] c_Pairs[3] c_Pairs[4] c_Force[1] c_Force[2] c_Force[3] c_Force[4] 
+dump 004 all local  ${dumpstep} *_Fd.PairForceMore  index  c_Force[5] c_Force[6] c_Force[7] c_Force[8] c_Force[9]  c_Force[10]  c_Force[11]  c_Force[12]  c_Force[13]  c_Force[14]
+# ....the single() function also calculates 10 extra pairwise quantities. The first 3 are the components of the tangential force between particles I and J, acting on particle I. The 4th is the magnitude of this tangential force. The next 3 (5-7) are the components of the relative velocity in the normal direction (along the line joining the 2 sphere centers). The last 3 (8-10) the components of the relative velocity in the tangential direction. These extra quantities can be accessed by the compute pair/local command, as p1, p2,..., p10.
+# RUN1 ---------------------------------------------------------    
+variable totalstep  equal ${End_of_Fd}     #End_of_Fd upon reaching Z=Zf.....//jc1201a//
+timestep       ${dt1}
+thermo         100 #10000  #HJ20210519 
+thermo_style custom step temp press vol time
+run            ${totalstep}
+
+
+neigh_modify    every 1 delay 0 check yes  #HJ20210519
+
+undump 001a #-------------------------------------------------------all below replaced //jc1118//
+undump 003
+undump 004
+# DUMP2 : CS---------------------------------------- //jc1117//
+variable dumpstep equal ${dump2}
+dump 001a all custom ${dumpstep} *_CS.atomsXYZ id type radius xu yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+#dump 001b all custom ${dumpstep} *_CS.atomsXYZwrapXonly id type radius x yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+dump 003 all local  ${dumpstep} *_CS.PairForce  index  c_Pairs[1] c_Pairs[2] c_Pairs[3] c_Pairs[4] c_Force[1] c_Force[2] c_Force[3] c_Force[4] 
+dump 004 all local  ${dumpstep} *_CS.PairForceMore  index  c_Force[5] c_Force[6] c_Force[7] c_Force[8] c_Force[9]  c_Force[10]  c_Force[11]  c_Force[12]  c_Force[13]  c_Force[14]
+# RUN2 ---------------------------------------------------------      
+#print 'PRINT: zMove=${zMove}; Amp_Uz=${Amp_Uz}  '
+timestep       ${dt2}
+thermo         ${dump2}
+thermo_style custom step temp press vol time
+run            ${totalstep_CS}
+
+undump 001a
+undump 003
+undump 004
+# DUMP3 : SS---------------------------------------- //jc1117//:qqq
+variable dumpstep equal ${dump_SS}
+dump 001a all custom ${dumpstep} *_SS.atomsXYZ id type radius xu yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+#dump 001b all custom ${dumpstep} *_SS.atomsXYZwrapXonly id type radius x yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+dump 002a Flow custom ${dumpstep} *_SS.NContFlow id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
+dump 002b LW custom ${dumpstep} *_SS.NContLW id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
+dump 002c UW custom ${dumpstep} *_SS.NContUW id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
+dump 003 all local  ${dumpstep} *_SS.PairForce  index  c_Pairs[1] c_Pairs[2] c_Pairs[3] c_Pairs[4] c_Force[1] c_Force[2] c_Force[3] c_Force[4] 
+dump 004 all local  ${dumpstep} *_SS.PairForceMore  index  c_Force[5] c_Force[6] c_Force[7] c_Force[8] c_Force[9]  c_Force[10]  c_Force[11]  c_Force[12]  c_Force[13]  c_Force[14]
+# RUN3 --------------------------------------------------------          
+timestep       ${dt}
+thermo         100000
+thermo_style custom step temp press vol time
+run            ${totalstep_SS}
+
+
