@@ -205,29 +205,29 @@ dump 001a all custom ${dumpstep} *_CS.atomsXYZ id type radius xu yu zu vx vy vz 
 #dump 001b all custom ${dumpstep} *_CS.atomsXYZwrapXonly id type radius x yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
 dump 003 all local  ${dumpstep} *_CS.PairForce  index  c_Pairs[1] c_Pairs[2] c_Pairs[3] c_Pairs[4] c_Force[1] c_Force[2] c_Force[3] c_Force[4] 
 dump 004 all local  ${dumpstep} *_CS.PairForceMore  index  c_Force[5] c_Force[6] c_Force[7] c_Force[8] c_Force[9]  c_Force[10]  c_Force[11]  c_Force[12]  c_Force[13]  c_Force[14]
-# RUN2 ---------------------------------------------------------      
-#print 'PRINT: zMove=${zMove}; Amp_Uz=${Amp_Uz}  '
-timestep       ${dt2}
-thermo         ${dump2}
-thermo_style custom step temp press vol time
-run            ${totalstep_CS}
-
-undump 001a
-undump 003
-undump 004
-# DUMP3 : SS---------------------------------------- //jc1117//:qqq
-variable dumpstep equal ${dump_SS}
-dump 001a all custom ${dumpstep} *_SS.atomsXYZ id type radius xu yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
-#dump 001b all custom ${dumpstep} *_SS.atomsXYZwrapXonly id type radius x yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
-dump 002a Flow custom ${dumpstep} *_SS.NContFlow id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
-dump 002b LW custom ${dumpstep} *_SS.NContLW id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
-dump 002c UW custom ${dumpstep} *_SS.NContUW id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
-dump 003 all local  ${dumpstep} *_SS.PairForce  index  c_Pairs[1] c_Pairs[2] c_Pairs[3] c_Pairs[4] c_Force[1] c_Force[2] c_Force[3] c_Force[4] 
-dump 004 all local  ${dumpstep} *_SS.PairForceMore  index  c_Force[5] c_Force[6] c_Force[7] c_Force[8] c_Force[9]  c_Force[10]  c_Force[11]  c_Force[12]  c_Force[13]  c_Force[14]
-# RUN3 --------------------------------------------------------          
-timestep       ${dt}
-thermo         100000
-thermo_style custom step temp press vol time
-run            ${totalstep_SS}
+# # RUN2 ---------------------------------------------------------      
+# #print 'PRINT: zMove=${zMove}; Amp_Uz=${Amp_Uz}  '
+# timestep       ${dt2}
+# thermo         ${dump2}
+# thermo_style custom step temp press vol time
+# run            ${totalstep_CS}
+# 
+# undump 001a
+# undump 003
+# undump 004
+# # DUMP3 : SS---------------------------------------- //jc1117//:qqq
+# variable dumpstep equal ${dump_SS}
+# dump 001a all custom ${dumpstep} *_SS.atomsXYZ id type radius xu yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+# #dump 001b all custom ${dumpstep} *_SS.atomsXYZwrapXonly id type radius x yu zu vx vy vz fx fy fz omegax omegay omegaz tqx tqy tqz
+# dump 002a Flow custom ${dumpstep} *_SS.NContFlow id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
+# dump 002b LW custom ${dumpstep} *_SS.NContLW id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
+# dump 002c UW custom ${dumpstep} *_SS.NContUW id type c_Cont2 c_Cont4 c_ContAll # //jc20210527 suggested by HJ//
+# dump 003 all local  ${dumpstep} *_SS.PairForce  index  c_Pairs[1] c_Pairs[2] c_Pairs[3] c_Pairs[4] c_Force[1] c_Force[2] c_Force[3] c_Force[4] 
+# dump 004 all local  ${dumpstep} *_SS.PairForceMore  index  c_Force[5] c_Force[6] c_Force[7] c_Force[8] c_Force[9]  c_Force[10]  c_Force[11]  c_Force[12]  c_Force[13]  c_Force[14]
+# # RUN3 --------------------------------------------------------          
+# timestep       ${dt}
+# thermo         100000
+# thermo_style custom step temp press vol time
+# run            ${totalstep_SS}
 
 

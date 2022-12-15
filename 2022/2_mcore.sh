@@ -1,6 +1,7 @@
 #!/bin/bash
+
 #SBATCH --job-name=My_MCORE_Job # shows up in the output of 'squeue'
-#SBATCH --time=1-00:00:00       # specify the requested wall-time
+#SBATCH --time=01:00:00       # specify the requested wall-time
 #SBATCH --nodes=1               # -n number of nodes allocated for this job
 #SBATCH --ntasks-per-node=1     # number of MPI ranks per node
 #SBATCH --cpus-per-task=10      # -c number of OpenMP threads per MPI rank
