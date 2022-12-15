@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 #SBATCH --job-name=ASGC_TEST     # shows up in the output of 'squeue'
 #SBATCH --time=00:50:00       # specify the requested wall-time
-#SBATCH --nodes=1               # -n number of nodes allocated for this job
-#SBATCH --ntasks-per-node=1     # number of MPI ranks per node
-#SBATCH --cpus-per-task=3      # -c number of OpenMP threads per MPI rank
+#SBATCH --nodes=3               # -n number of nodes allocated for this job
+#SBATCH --ntasks-per-node=3     # number of MPI ranks per node
+#SBATCH --cpus-per-task=8      # -c number of OpenMP threads per MPI rank
 #SBATCH --error=job.%J.err      # job error. By default, both files are directed to a file of the name slurm-%j.err
 #SBATCH --output=job.%J.out     # job output. By default, both files are directed to a file of the name slurm-%j.out
 
